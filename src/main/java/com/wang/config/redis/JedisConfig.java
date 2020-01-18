@@ -57,13 +57,15 @@ public class JedisConfig {
             jedisPoolConfig.setMaxWaitMillis(maxWait);
             jedisPoolConfig.setMaxTotal(maxActive);
             jedisPoolConfig.setMinIdle(minIdle);
-            // JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
-            String pwd = StringUtil.isBlank(password) ? null : password;
-            JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, pwd);
-            logger.info("初始化Redis连接池JedisPool成功!地址: " + host + ":" + port);
+            // 密码为空设置为null
+            if (StringUtil.isBlank(password)) {
+                password = null;
+            }
+            JedisPool jedisPool = new JedisPool(jedisPoolConfig, host, port, timeout, password);
+            logger.info("初始化Redis连接池JedisPool成功!地址: {}:{}", host, port);
             return jedisPool;
         } catch (Exception e) {
-            logger.error("初始化Redis连接池JedisPool异常:" + e.getMessage());
+            logger.error("初始化Redis连接池JedisPool异常:{}", e.getMessage());
         }
         return null;
     }
